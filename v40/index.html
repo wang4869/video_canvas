@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+</head>
+
+<body>
+
+<script>
+var isIphone = navigator.userAgent.toLowerCase().indexOf('iphone') >= 0;
+	// var sound = document.createElement('audio');
+	var ld=vd=0;
+	// sound.src = 'media/sound.mp3';	
+	if (isIphone) {
+	    var canvasVideo = new CanvasVideoPlayer({
+			videoSelector: '.js-video',
+			canvasSelector: '.js-canvas',
+			hideVideo: true,
+			audio: true,
+		});
+		
+	}else {
+		isadro = 0;
+		vd = 1;
+	    $('.js-canvas').hide();
+	    $('.video').remove();
+	    $('.video-responsive').append('<video src="media/2.mp4" id="video" width="0" height="0" style="background:transparent;"></video>')
+
+		$('#video').get(0).load();
+		// $('#video').get(0).play();
+		$('#video').get(0).addEventListener('canplaythrough',function(){
+			
+	    })
+
+	    $('#video').on('ended',function(){
+	    	showBtn();
+	    	$('#video').remove();
+	    })
+	}
+	
+	function showBtn()
+	{
+		//$('.js-canvas').hide();
+		$('.pop-info').show();
+		//videomc.style.visibility="hidden";
+		//videomc2.style.visibility="hidden";
+		//$("body").unbind("touchmove");
+		console.log("video play end")
+	}
+
+	function playVideo()
+	{
+		console.log("video play start");
+		//$('.pop-info').show();
+		videomc.style.visibility="visible";
+		videomc2.style.visibility="visible";
+		if(canvasVideo)
+		{
+			canvasVideo.play();
+		}
+		else
+		{
+			//alert(window.innerWidth + " " + window.innerHeight)
+			$('#video').width(640).height(1040).get(0).play();
+		}
+	}
+	
+	function appclick()
+	{
+		wa.sendEvent("click","appclick")	
+	}
+</script>
+
+</body>
+</html>
