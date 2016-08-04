@@ -1,0 +1,135 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" >
+<meta name="viewport" content="user-scalable=no, width=640">
+<title>canvas自动播放视频</title>
+<link rel="stylesheet" href="css/demo.css">
+</head>
+<body>
+<div id="masker">
+	视频画入canvas,音频用audio播放mp4 实现动画播放<br>
+    ios为canvas，其他直接用video标签播放<br>
+    点击此处播放
+</div>
+<div class="video-wrapper js-video-wrapper">
+	<div class="video-responsive">
+		<video class="video js-video" webkit-playsinline muted>
+			<source src="final.mp4" type="video/mp4">
+		</video>
+		<canvas class="canvas js-canvas"></canvas>
+		<div class="video-timeline js-timeline">
+			<div class="video-timeline-passed js-timeline-passed">
+			</div>
+		</div>
+	</div>
+</div>
+<script src="js/jquery.min.js"></script>
+<script src="js/hammer.min.js"></script>
+<script src="js/jquery.hammer.js"></script>
+<script src="js/jquery.transit.min.js"></script>
+<script src="canvas-video-player.js"></script>
+<script>
+	var isIphone = navigator.userAgent.toLowerCase().indexOf('iphone') >= 0;
+	// var sound = document.createElement('audio');
+	var ld=vd=0;
+	// sound.src = 'media/sound.mp3';
+	playOver();
+	
+	isIphone=true;
+	
+	if (isIphone) {
+	    var canvasVideo = new CanvasVideoPlayer({
+			videoSelector: '.js-video',
+			canvasSelector: '.js-canvas',
+			hideVideo: true,
+			audio: true,
+		});
+	}else {
+		vd = 1;
+	    $('canvas').hide();
+	    $('.video').remove();
+	    $('.video-responsive').append('<video src="final.mp4" id="video" width="640" height="1040" style="background:#000;"></video>')
+
+		$('#video').get(0).load();
+		// $('#video').get(0).play();
+		/*$('#video').get(0).addEventListener('canplaythrough',function(){
+	    })*/
+		
+		$('#video').get(0).addEventListener('timeupdate',function(){
+			var ct=$('#video').get(0).currentTime;
+			$('.bvideo').html(ct);
+	    })
+
+	    $('#video').on('ended',function(){
+	    	showBtn();
+	    	$('#video').remove();
+	    })
+
+	}
+	
+	function playOver(){
+		$('.test').html('ok');
+		/*$('#load1').transition({'opacity':1,delay:1000},500)
+		$('#load2').transition({'opacity':1,delay:2000},500)
+		$('#load3').transition({'opacity':1,delay:2000},500)
+		$('#load4').transition({'opacity':1,delay:3000},function(){
+			ld=1
+			if(vd==1){
+				$('#load5').transition({'opacity':1,delay:2000},function(){
+					$('#loading').hide();
+					$('.test').html('ok');
+				})
+			}
+		})	*/	
+	}
+	// function playOver(){
+	// 	// $('#btn').show();
+	// }
+	function showBtn(){
+		$('#link').show();
+	}
+	$('#masker').on('click',function(){
+		$('#masker').hide();
+		if(canvasVideo){
+			canvasVideo.play();
+		}else{
+			$('#video').width(640).height(1040).get(0).play();
+		}
+	})
+
+	$('#link a').on('touchend',function(){
+		var href = $(this).data('href');
+		location.href = href;
+	})
+	// $('#loading').on('touchend',function(){
+	// 	location.reload(true);
+	// })
+
+	document.addEventListener('touchmove',function(e){
+		e.preventDefault();
+	})
+	
+	window.onload=function(){
+		setTimeout(function(){
+			$('#masker').hide();
+			canvasVideo.play();
+			},5000);
+		}
+	
+var canDrawImg=false;	
+var cImg=new Image();
+cImg.onload=function(){
+	canDrawImg=true;
+	}
+cImg.src='vBtn4.jpg';
+</script>
+
+<p class="test" style="color:#FFF; position:fixed; left:320px; top:10px; z-index:999; font-size:20px;"></p>
+<p class="step" style="color:#FFF; position:fixed; left:320px; top:40px; z-index:999; font-size:20px;"></p>
+<p class="note" style="color:#FFF; position:fixed; left:320px; top:70px; z-index:999; font-size:20px;">Canvas左上角图片是绘制进去的 中间部分是video</p>
+
+<p class="bvideo" style="color:#FFF; position:fixed; left:320px; bottom:10px; z-index:999; font-size:20px;"></p>
+</body>
+</html>
